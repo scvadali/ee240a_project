@@ -141,5 +141,25 @@ This section summarizes the time-domain response of the op-amp.
 | Avg Total Power              | 0.264 mW        | 0.312 mW          |
 | FoM                           | 36.10           | 20.08             |
 
+Rise time for a 350 mV input step and the corresponding settling error (0.2% threshold) is shown here. Note that the feedback loop sets the ideal closed-loop gain to 2.
+
+![Rise time](images/rise_time.png) 
+
+Fall time for a 350 mV input step and the corresponding settling error (0.2% threshold) is shown here.
+
+![Fall time](images/fall_time.png) 
+
+Just as a sanity check, the gate voltages on the class-AB stage were plotted as a function of time for a given period, and the corresponding maximum current draw is also shown. This proves that our design choice to use a class-AB stage helped in achieving a high slew rate. 
+
+![Slew rate](images/classAB_transient.png) 
+
+## Area
+
+The total area of the design was calculated by multiplying the length and width of each transistor and passive component. The entire amplifier occupies an area of 975.9 μm2. Given that each sub-pixel is driven by one such amplifier, the total area occupied by the LCD driver can be calculated as follows:
+
+**Total Area = #Sub-pixels × Resolution × Area of single amplifier = 3 × 272 × 340 × 975.9μm2 = 270.7 mm2**
+
+A typical 38 mm Apple Watch Series 1, which has the same resolution (though with an OLED display instead), has a display area of 564 mm2. Therefore, the entire LCD driver unit occupies approximately 48% of the display area. This is certainly quite large and presents an opportunity for optimization.
 
 ## Potential Improvements
+
