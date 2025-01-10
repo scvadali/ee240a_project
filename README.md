@@ -73,13 +73,73 @@ where CL represents the load model that needs to be driven for the sub-pixel.
 
 ## Telescopic Cascode Design
 
+To conserve power, I opted to use VDDL (1.1 V) for the first stage. This decision introduced an additional constraint, further narrowing the design space for the first stage. On the PMOS active load side, I opted for a low-voltage cascode current mirror, as shown below. This choice reduces the voltage drop by Vth, increasing the total voltage budget at the output of the first stage. The transistors in this stage were designed for a high-gm/ID to maximize gain while reducing power consumption. This meant that the transistors operated in sub-threshold region. A drop of 100 mV was chosen across the tail transistors. To improve CMRR, a 'poor-man's cascode' configuration was used for the tail transistors. 
+
+![Telescopic cascode](images/telcas.png)
+
+## Source-Follower for Level-Shifting
+
+The second-stage has 2 input devices since its of class-AB. The output of the first stage was connected to the NMOS directly and a PMOS source follower was used to level-shift the voltage up to bias the PMOS in the class-AB stage as shown below. 
+
+![Source Follower](images/sf.png)
+
 
 ## Biasing
 
+The following biasing network was used to generate the various biases required for each stage, including the source follower level-shifter. A maximum current-mirror ratio of 10 was allowed for the design, and it was used to mirror the current from the primary bias generator to all the other branches.
+
+![Biasing Network](images/bias.png)
+
 ## Miller Compensation
+
+A standard Miller compensation capacitor, Cc, and a resistor, **Rc**, were connected between the outputs of the two stages, as shown in Fig. 8. With **gm,output** representing the total gm of the
+class AB stage, **Rc** was calculated to push the right-half-plane (RHP) zero associated with the
+compensation technique to infinity using the following formula:
+
+**Rc ≈ 1/gm,output**
 
 ## Results - Frequency Response
 
+This section summarizes the frequency response of the op-amp. 
+
+| Parameter                         | Target/Calculated Spec | Design Spec | Change  |
+|------------------------------------|------------------------|-------------|---------|
+| DM gain at DC (A0)                 | 77.50 dB               | 86.19 dB    | ↑       |
+| CMRR at DC                         | ≥ 70 dB                | 70.14 dB    | ↔       |
+| PSRR (VDDL) at DC                  | ≥ 50 dB                | 51.53 dB    | ↔       |
+| PSRR (VDDH) at DC                  | ≥ 50 dB                | 62.42 dB    | ↑       |
+| Phase Margin                       | ≥ 45°                  | 51.53°      | ↔       |
+| Unity Gain Frequency (fu)         | 35 MHz                 | 19.03 MHz   | ↓       |
+
+
+The common-mode and differential-mode gains are plotted below and the CMRR is marked. 
+
+![Bode plots open loop](images/cm_dm.png) 
+
+
+The loop-gain of the op-amp in negative feedback (given to us) is shown below.
+
+![Closed-loop frequency response](images/lg.png) 
+
+The design meets all the specs. 
+
 ## Results - Transient Response
+
+This section summarizes the time-domain response of the op-amp. 
+
+| Parameter                    | 5 mV input step | 350 mV input step |
+|------------------------------|-----------------|-------------------|
+| Rise Time                    | 104.6 ns        | 152.5 ns          |
+| Fall Time                    | 102.9 ns        | 159.2 ns          |
+| Settling Time                | 104.6 ns        | 159.2 ns          |
+| SR+ max                       | -               | 17.6 V/us         |
+| SR- max                       | -               | 17.2 V/us         |
+| CE (Imax/Ibias)              | -               | 10.66             |
+| Error                        | < 0.1%          | < 0.1%            |
+| Avg Power (VDDL)             | 0.110 mW        | 0.110 mW          |
+| Avg Power (VDDH)             | 0.154 mW        | 0.202 mW          |
+| Avg Total Power              | 0.264 mW        | 0.312 mW          |
+| FoM                           | 36.10           | 20.08             |
+
 
 ## Potential Improvements
