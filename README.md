@@ -161,5 +161,5 @@ The total area of the design was calculated by multiplying the length and width 
 
 A typical 38 mm Apple Watch Series 1, which has the same resolution (though with an OLED display instead), has a display area of 564 mm2. Therefore, the entire LCD driver unit occupies approximately 48% of the display area. This is certainly quite large and presents an opportunity for optimization.
 
-## Potential Improvements
+
 
